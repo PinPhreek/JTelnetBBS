@@ -5,10 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import pinphreek.config.Config;
+
 public class Load {
 
-	public static int port = 23;
-	public static String motd = "Welcome to this server!";
+
 
 	private static File cfgFile = new File("config.txt");;
 
@@ -21,8 +22,8 @@ public class Load {
 			cfgFile.createNewFile();
 
 			FileWriter w = new FileWriter(cfgFile);
-			w.write(PORT + ":" + port);
-			w.write(MOTD + ":" + motd);
+			w.write(PORT + ":" + Config.port + "\r\n");
+			w.write(MOTD + ":" + Config.motd + "\r\n");
 			w.flush();
 			w.close();
 			return;
@@ -37,14 +38,18 @@ public class Load {
 			if (s.toLowerCase().contains(PORT.toLowerCase())) {
 				s2 = s.replace(" ", "");
 				try {
-					port = Integer.valueOf(s2.split(":")[1]);
+					Config.port = Integer.valueOf(s2.split(":")[1]);
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.err.println("Mal-formated config file!");
+					sc.close();
+					/*I said TAKE THE DEFAULTS!!!!!!*/
+					return;
 				}
 			}
 			else if (s.toLowerCase().contains(MOTD.toLowerCase())) {
-				s2 = s.replace(" ", "");
-				port = Integer.valueOf(s2.split(":")[1]);
+				s2 = s.replace(" ", "").replace("_", " ");
+				Config.motd = s2.split(":")[1];
 			}
 		}
 		sc.close();
@@ -61,8 +66,8 @@ public class Load {
 			cfgFile.createNewFile();
 
 			FileWriter w = new FileWriter(cfgFile);
-			w.write(PORT + ":" + port);
-			w.write(MOTD + ":" + motd);
+			w.write(PORT + ":" + Config.port + "\r\n");
+			w.write(MOTD + ":" + Config.motd.replace(" ", "_") + "\r\n");
 			w.flush();
 			w.close();
 			return;
@@ -77,14 +82,18 @@ public class Load {
 			if (s.toLowerCase().contains(PORT.toLowerCase())) {
 				s2 = s.replace(" ", "");
 				try {
-					port = Integer.valueOf(s2.split(":")[1]);
+					Config.port = Integer.valueOf(s2.split(":")[1]);
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.err.println("Mal-formated config file!");
+					sc.close();
+					/*I said TAKE THE DEFAULTS!!!!!!*/
+					return;
 				}
 			}
 			else if (s.toLowerCase().contains(MOTD.toLowerCase())) {
-				s2 = s.replace(" ", "");
-				port = Integer.valueOf(s2.split(":")[1]);
+				s2 = s.replace(" ", "").replace("_", " ");
+				Config.motd = s2.split(":")[1];
 			}
 		}
 		sc.close();
