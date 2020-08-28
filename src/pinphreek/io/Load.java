@@ -11,7 +11,7 @@ public class Load {
 
 
 
-	private static File cfgFile = new File("config.txt");;
+	private static File cfgFile = new File("config.txt");
 
 	public static void readConfigFile() throws IOException {
 
