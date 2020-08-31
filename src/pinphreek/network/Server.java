@@ -21,19 +21,19 @@ public class Server {
 		
 		servSocket = new ServerSocket(Config.port);
 		System.out.println("Server has started!");
-		client = servSocket.accept();
+		client = servSocket.accept();//need a handler here
 		System.out.println("Client: " + client.getRemoteSocketAddress().toString());
 		String msg;
 		while(true) {
-			msg = readMessage();
+			msg = readMessage(client);
 			if(msg.isEmpty()) continue;
 			System.out.println("[" + java.time.LocalTime.now() + "] Recieved: " + msg);
 			writeMessage(client, msg);
 		}
 		
 	}
-	private String readMessage() throws IOException {//halts program-flow!! needs to be replaced later
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+	private String readMessage(Socket s) throws IOException {//halts program-flow!! needs to be threaded later
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(s.getInputStream()));
 	 	char[] buffer = new char[200];
 	 	bufferedReader.read(buffer, 0, 200);
 	 	String ret =new String(buffer, 0, bufferedReader.read(buffer, 0, 200)).replace("\n", "").replace("\r", ""); 
