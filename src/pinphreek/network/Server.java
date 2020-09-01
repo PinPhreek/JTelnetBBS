@@ -5,24 +5,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 
-import pinphreek.config.Config;
+public class Server implements Runnable{
 
-public class Server {
-
-	private ServerSocket servSocket;
-	private Socket client = null;
+	public Socket client = null;
 	
-	public Server() {}
+	public Server(Socket s) {
+		this.client = s;
+	}
 	
-	public void start() throws IOException {
+	@Override
+	public void run() {
 		
-		servSocket = new ServerSocket(Config.port);
-		System.out.println("Server has started!");
-		client = servSocket.accept();//need a handler here
-		System.out.println("Client: " + client.getRemoteSocketAddress().toString());
+		try {
+		//System.out.println("Client: " + client.getRemoteSocketAddress().toString());
 		String msg;
 		while(true) {
 			msg = readMessage(client);
@@ -31,6 +28,17 @@ public class Server {
 			writeMessage(client, msg);
 		}
 		
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.err.println("FATAL SERVER ERROR!");
+				System.exit(-1);
+			}
+		}
 	}
 	private String readMessage(Socket s) throws IOException {//halts program-flow!! needs to be threaded later
 		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(s.getInputStream()));
