@@ -29,3 +29,4 @@ config/
 #not needed
 out/
 .idea/
+bin/

@@ -35,8 +35,7 @@ public class ClientHandler {
 	public void broadcast(String message) throws IOException {
 		
 		for(int i = 0; i < clients.size(); i++) {
-			clients.get(i);
-			Server.writeMessage(clients.get(i).client, message);
+			clients.get(i).writeMessage(message);
 		}
 		
 	}

@@ -1,6 +1,7 @@
 package pinphreek.network;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -10,6 +11,11 @@ import java.net.Socket;
 public class Server implements Runnable {
 
 	public Socket client = null;
+	
+	@SuppressWarnings("unused")
+	private BufferedWriter out = null;
+	@SuppressWarnings("unused")
+	private BufferedReader in = null;
 
 	public Server(Socket s) {
 		this.client = s;
@@ -21,13 +27,15 @@ public class Server implements Runnable {
 		try {
 			// System.out.println("Client: " + client.getRemoteSocketAddress().toString());
 			String msg;
+			out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			while (true) {
-				Server.writeMessage(client, ">");
-				msg = readMessage(client);
+				writeMessage(">");
+				msg = readMessage();
 				if (msg.isEmpty())
 					continue;
 				System.out.println("[" + java.time.LocalTime.now() + "] Recieved: " + msg);
-				writeMessage(client, msg);
+				writeMessage(msg);
 			}
 
 		} catch (IOException e) {
@@ -43,24 +51,18 @@ public class Server implements Runnable {
 		}
 	}
 
-	private static String readMessage(Socket s) throws IOException {// halts program-flow!! needs to be threaded later
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(s.getInputStream()));
-		char[] buffer = new char[200];
-		bufferedReader.read(buffer, 0, 200);
-		String ret = new String(buffer, 0, bufferedReader.read(buffer, 0, 200));
-		/*for (int i = 0; i < buffer.length; i++) {
-			buffer[i] = '\0';
-		}*/
-		return ret.replace("\n", "").replace("\r", "");
+	private String readMessage() throws IOException {// halts program-flow!! needs to be threaded later
+		
+		return in.readLine().replace("\n", "").replace("\r", "");
 	}
 
-	public static void writeMessage(Socket s, String message) throws IOException {
-		PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
-		printWriter.print(message);
-		printWriter.flush();
+	public void writeMessage(String message) throws IOException {
+		out.write(message);
+		out.newLine();
+		out.flush();
 	}
 	
-	public static void sendMessage(Socket s, String message) throws IOException {
-		writeMessage(s, message);
+	public void sendMessage(String message) throws IOException {
+		writeMessage(message);
 	}
 }
