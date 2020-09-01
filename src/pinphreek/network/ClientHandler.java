@@ -18,7 +18,7 @@ public class ClientHandler {
 	public static int peopleOnline = 0;
 	
 	public ClientHandler() throws IOException {
-		server = new ServerSocket(/*Config.port*/1025);
+		server = new ServerSocket(Config.port);
 		System.out.println("Waiting for connections....");
 		while(true) {
 		

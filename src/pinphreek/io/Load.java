@@ -25,8 +25,9 @@ public class Load {
 			cfgFile.createNewFile();
 
 			FileWriter w = new FileWriter(cfgFile);
-			w.write(PORT + ":" + Config.port + "\r\n");
-			w.write(MOTD + ":" + Config.motd.replace(" ", "_") + "\r\n");
+			w.write(Config.PORT + ":" + Config.port + "\r\n");
+			w.write(Config.MOTD + ":" + Config.motd.replace(" ", "_") + "\r\n");
+			w.write(Config.MAX_CONNECTIONS + ":" + Config.maxConnections + "\r\n");
 			w.flush();
 			w.close();
 			return;
@@ -38,7 +39,7 @@ public class Load {
 		while (sc.hasNextLine()) {
 
 			s = sc.nextLine();
-			if (s.toLowerCase().contains(PORT.toLowerCase())) {
+			if (s.toLowerCase().contains(Config.PORT.toLowerCase())) {
 				s2 = s.replace(" ", "");
 				try {
 					Config.port = Integer.valueOf(s2.split(":")[1]);
@@ -50,16 +51,26 @@ public class Load {
 					return;
 				}
 			}
-			else if (s.toLowerCase().contains(MOTD.toLowerCase())) {
+			else if (s.toLowerCase().contains(Config.MOTD.toLowerCase())) {
 				s2 = s.replace(" ", "").replace("_", " ");
 				Config.motd = s2.split(":")[1];
+			}
+			else if (s.toLowerCase().contains(Config.MAX_CONNECTIONS.toLowerCase())) {
+				s2 = s.replace(" ", "");
+				try {
+					Config.maxConnections = Integer.valueOf(s2.split(":")[1]);
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.err.println("Mal-formated config file!");
+					sc.close();
+					/*I said TAKE THE DEFAULTS!!!!!!*/
+					return;
+				}
 			}
 		}
 		sc.close();
 	}
 
-	// TODO put in array #short code
-	public static String PORT = "PORT";
-	public static String MOTD = "MOTD";
+
 
 }
