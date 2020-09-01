@@ -12,7 +12,7 @@ public class Main {
 		 * Read config file and updates defaults in io.Load
 		 * */
 		try {
-			Load.readConfigFile();
+			Load.readConfigFile("config.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Unexpected File-error occured!\nGoing with default values.");
