@@ -1,11 +1,13 @@
 package pinphreek.io;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
 import pinphreek.config.Config;
+import pinphreek.users.User;
 
 public class Load {
 
@@ -71,6 +73,52 @@ public class Load {
 		sc.close();
 	}
 
-
+	public static User loadUser(String name, String path, String login) {
+		User ret = new User();
+		
+		File f = new File(path);
+		if(!f.exists()) {
+			try {
+				f.createNewFile();
+				FileWriter w = new FileWriter(f);
+				w.write(User._NAME + ":admin\r\n");
+				w.write(User._COUNTRY + ":DE\r\n");
+				w.write(User._AGE + "100\r\n");
+				w.write(User._YEAR_REGISTERED + "\r\n");
+				w.write("###\r\n");
+				w.flush();
+				w.close();
+				System.out.println("Config-file created successfully!");
+				System.exit(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.err.println("Failed to create users-file at " + f.getAbsolutePath());
+			}
+		}
+		/*only return a user when right login-credentials*/
+		try {
+			Scanner sc = new Scanner(f);
+			
+			while(sc.hasNextLine()) {
+			
+				//TODO finish this....
+				
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.err.println("Error reading users-file at " + f.getAbsolutePath());
+		}
+		return ret;
+	}
 
 }
+
+
+
+
+
+
+
+
+

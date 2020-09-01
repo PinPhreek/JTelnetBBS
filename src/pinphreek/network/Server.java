@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
+import pinphreek.main.Main;
+
 public class Server implements Runnable {
 
 	public Socket client = null;
@@ -34,7 +36,15 @@ public class Server implements Runnable {
 				if (msg.isEmpty())
 					continue;
 				System.out.println("[" + java.time.LocalTime.now() + "] Recieved: " + msg);
-				writeMessage(msg);
+				if(msg.startsWith("!b")) 
+					for(int i = 2; i < msg.length(); i++) {
+						if(msg.charAt(i) != ' ') {
+							ClientHandler.broadcast(msg.substring(i));
+							break;
+						}
+					}
+				else
+					writeMessage(msg);
 			}
 
 		} catch (IOException e) {
@@ -52,7 +62,7 @@ public class Server implements Runnable {
 
 	private String readMessage() throws IOException {// halts program-flow!! needs to be threaded later
 		
-		return in.readLine().replace("\n", "").replace("\r", "");
+		return in.readLine().replaceAll("[^!A-Za-z0-9 ]+", "");
 	}
 
 	public void writeMessage(String message) throws IOException {

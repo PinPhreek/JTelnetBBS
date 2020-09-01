@@ -30,12 +30,15 @@ public class ClientHandler {
 			clients.add(serv);
 			pool.execute(serv);
 			broadcast(client.getInetAddress().getHostName() + " has joined the server!\n");
+			client = null;
+			serv = null;
 		}
 	}
-	public void broadcast(String message) throws IOException {
+	public static void broadcast(String message) throws IOException {
 		
 		for(int i = 0; i < clients.size(); i++) {
-			clients.get(i).writeMessage(message);
+			clients.get(i).writeMessage(message);	
+			System.out.println("[" + java.time.LocalTime.now() + "] Broadcast: " + message);
 		}
 		
 	}

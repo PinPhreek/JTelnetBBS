@@ -7,6 +7,7 @@ import pinphreek.network.ClientHandler;
 
 public class Main {
 
+	public static ClientHandler handler;
 	public static void main(String[] args){
 		/**
 		 * Read config file and updates defaults in io.Load
@@ -22,8 +23,7 @@ public class Main {
 		 * Start server with parameters read in by Load.readConfigFile()
 		 * */
 		try {
-			ClientHandler handler = new ClientHandler();
-			handler.broadcast("online");
+			handler = new ClientHandler();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
