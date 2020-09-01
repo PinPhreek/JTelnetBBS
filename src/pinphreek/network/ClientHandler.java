@@ -18,22 +18,25 @@ public class ClientHandler {
 	public static int peopleOnline = 0;
 	
 	public ClientHandler() throws IOException {
-		server = new ServerSocket(Config.port);
+		server = new ServerSocket(/*Config.port*/1025);
 		System.out.println("Waiting for connections....");
 		while(true) {
 		
 			client = server.accept();
+			peopleOnline++;
 			System.out.println(client.getRemoteSocketAddress() + " has connected to the server.");
-			System.out.println((peopleOnline--) + " connections remaining.");
+			System.out.printf("%3d connections remaining.\n", (Config.maxConnections - peopleOnline));
 			Server serv = new Server(client);
 			clients.add(serv);
 			pool.execute(serv);
+			broadcast(client.getInetAddress().getHostName() + " has joined the server!\n");
 		}
 	}
 	public void broadcast(String message) throws IOException {
 		
 		for(int i = 0; i < clients.size(); i++) {
-			clients.get(i).writeMessage(clients.get(i).client, message);
+			clients.get(i);
+			Server.writeMessage(clients.get(i).client, message);
 		}
 		
 	}

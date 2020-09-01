@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import pinphreek.io.Load;
 import pinphreek.network.ClientHandler;
-import pinphreek.network.Server;
 
 public class Main {
 
@@ -24,6 +23,7 @@ public class Main {
 		 * */
 		try {
 			ClientHandler handler = new ClientHandler();
+			handler.broadcast("online");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
