@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import pinphreek.main.Main;
-
 public class Server implements Runnable {
 
 	public Socket client = null;

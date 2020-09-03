@@ -5,6 +5,7 @@ public class User {
 	private String name = null;
 	private String country = null;
 	private int age = 0;
+	public boolean isLoggedIn = false;
 	
 	public User() {}
 	public User(String name, String country, int age) {
@@ -36,4 +37,5 @@ public class User {
 	public static final String _COUNTRY = "COUNTRY";
 	public static final String _AGE = "AGE";
 	public static final String _YEAR_REGISTERED = "YEAR_REGISTERED";
+	public static final String _PASSWORD = "PASSWORD";
 }
