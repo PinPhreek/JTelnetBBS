@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import pinphreek.io.Load;
 import pinphreek.network.ClientHandler;
+import pinphreek.users.Groups;
 
 public class Main {
 
@@ -12,8 +13,11 @@ public class Main {
 		/**
 		 * Read config file and updates defaults in io.Load
 		 * */
+		@SuppressWarnings("unused")
+		Groups groups;
 		try {
 			Load.readConfigFile("config.txt");
+			groups = new Groups(Load.getSavedGroups("groups.txt"));
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.err.println("Unexpected File-error occured!\nGoing with default values.");

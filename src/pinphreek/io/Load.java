@@ -5,9 +5,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import pinphreek.config.Config;
+import pinphreek.users.Group;
 import pinphreek.users.User;
 
 public class Load {
@@ -87,7 +89,7 @@ public class Load {
 				w.write(User._AGE + ":100\r\n");
 				w.write(User._YEAR_REGISTERED + ":" + LocalDate.now().getYear() + "\r\n");
 				w.write(User._PASSWORD + ": \r\n");
-				w.write("###\r\n");
+				//w.write("###\r\n");
 				w.flush();
 				w.close();
 				System.out.println("Config-file created successfully!");
@@ -118,6 +120,7 @@ public class Load {
 				}
 				else if(str.startsWith(User._YEAR_REGISTERED) && !ret.getName().equals(null)) {
 					ret.setAge(ret.getAge() + Math.abs(Integer.valueOf(str.split(":")[1]) - LocalDate.now().getYear())); //basicly wichcraft
+					ret.setRegisteredYear(Integer.valueOf(str.split(":")[1]));
 				}
 				else if(str.startsWith(User._PASSWORD) && !ret.getName().equals(null)) {
 					if(ret.getName().equalsIgnoreCase("admin") && str.split(":")[1].equals(" ")) {
@@ -125,6 +128,9 @@ public class Load {
 					}
 					else {
 						ret.isLoggedIn = str.split(":")[1].equals(password) && name.equalsIgnoreCase(ret.getName());
+					}
+					if(ret.isLoggedIn) {
+						ret.setPassword(str.split(":")[1]);
 					}
 				}
 				if(ret.getName().equalsIgnoreCase(name)) {
@@ -141,6 +147,40 @@ public class Load {
 		return ret;
 	}
 
+	public static ArrayList<Group> getSavedGroups(String path){
+		ArrayList<Group> ret = new ArrayList<Group>();
+		
+		File f = new File(path);
+		if(!f.exists()) {
+			try {
+				FileWriter w = new FileWriter(f);
+				w.write("[admin]{admin}\r\n");
+				w.write("[member]{}\r\n");
+				w.write("[guest]{}\r\n");
+				w.flush();
+				w.close();
+				ret.add(new Group("admin", new User("admin", "de", 100, 2020)));
+				return ret;
+			} catch (IOException e) {
+				System.err.println("Couldn't write group-file!\n");
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+		try {
+			Scanner sc = new Scanner(f);
+			String s = null;
+			while(sc.hasNextLine()) {
+				s = sc.nextLine();
+				ret.add(new Group(s.split("]")[0].replace("[", ""), Group.loadUsersFromString(s.split("]")[1])));
+			}
+			sc.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	
 }
 
 
