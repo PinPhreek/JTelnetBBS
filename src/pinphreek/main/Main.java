@@ -1,20 +1,22 @@
 package pinphreek.main;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import pinphreek.io.Load;
 import pinphreek.network.ClientHandler;
 import pinphreek.users.Groups;
+import pinphreek.users.User;
 
 public class Main {
 
 	public static ClientHandler handler;
+	public static Groups groups;
+	public static ArrayList<User> users = new ArrayList<User>();
 	public static void main(String[] args){
 		/**
 		 * Read config file and updates defaults in io.Load
 		 * */
-		@SuppressWarnings("unused")
-		Groups groups;
 		try {
 			Load.readConfigFile("config.txt");
 			groups = new Groups(Load.getSavedGroups("groups.txt"));
